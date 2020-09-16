@@ -30,3 +30,6 @@ do
 done
 
 echo $next_version > ../version
+git add version
+git commit -m "bump: $next_version"
+git push origin master
