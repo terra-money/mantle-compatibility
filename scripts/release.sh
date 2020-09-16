@@ -16,8 +16,8 @@ release() {
     cd $dir
 
     git init
-    git remote add origin $origin
-    git add . > /dev/null
+    git remote add origin $origin > /dev/null
+    git add . > /dev/null > /dev/null
     git commit -m "release/$next_version" > /dev/null
     git tag $tagname > /dev/null
     git push origin $tagname
@@ -30,6 +30,7 @@ do
 done
 
 echo $next_version > ../version
+cd ../
 git add version
 git commit -m "bump: $next_version"
 git push origin master
