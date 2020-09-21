@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func NewGenesis(genesisAccounts ...GenesisAccount) *GenesisDoc {
+func NewGenesis(chainId string, genesisAccounts ...GenesisAccount) *GenesisDoc {
 	codec := app.MakeCodec()
 	appStates := app.ModuleBasics.DefaultGenesis()
 	appStates["accounts"] = codec.MustMarshalJSON(genesisAccounts)
@@ -22,7 +22,7 @@ func NewGenesis(genesisAccounts ...GenesisAccount) *GenesisDoc {
 	}
 
 	gendoc := &GenesisDoc{
-		ChainID:     "mantle-sim",
+		ChainID:     chainId,
 		Validators:  nil,
 		AppState:    appStatesJson,
 		GenesisTime: time.Now(),
