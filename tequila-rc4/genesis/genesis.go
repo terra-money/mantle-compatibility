@@ -14,7 +14,11 @@ import (
 func NewGenesis(chainId string, genesisAccounts ...GenesisAccount) *GenesisDoc {
 	codec := app.MakeCodec()
 	appStates := app.ModuleBasics.DefaultGenesis()
-	appStates["accounts"] = codec.MustMarshalJSON(genesisAccounts)
+
+	authDefaultState := authtypes.DefaultGenesisState()
+	authDefaultState.Accounts = genesisAccounts
+
+	appStates["auth"] = codec.MustMarshalJSON(authDefaultState)
 	appStatesJson, err := codec.MarshalJSON(appStates)
 
 	if err != nil {
