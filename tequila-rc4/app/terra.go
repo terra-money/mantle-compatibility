@@ -3,7 +3,6 @@ package app
 import (
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/spf13/viper"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
 	terra "github.com/terra-project/core/app"
@@ -20,8 +19,8 @@ func NewTerraApp(db dbm.DB) *terra.TerraApp {
 		0,
 		make(map[int64]bool),
 		&wasmconfig.Config{BaseConfig: wasmconfig.BaseConfig{
-			ContractQueryGasLimit: viper.GetUint64(wasmconfig.FlagContractQueryGasLimit),
-			CacheSize:             viper.GetUint64(wasmconfig.FlagCacheSize),
+			ContractQueryGasLimit: uint64(3000000),
+			CacheSize:             uint64(3000000),
 		}},
 		fauxMerkleModeOpt, // error
 		setPruningOptions(),
