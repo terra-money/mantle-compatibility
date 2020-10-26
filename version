@@ -1,1 +1,1 @@
-1.2.1
+usage: semver.sh [-Mmp] major.minor.patch
