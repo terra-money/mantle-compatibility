@@ -1,6 +1,7 @@
 package genesis
 
 import (
+	"encoding/json"
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authexported "github.com/cosmos/cosmos-sdk/x/auth/exported"
@@ -11,19 +12,42 @@ import (
 	"time"
 )
 
-func NewGenesis(chainId string, genesisAccounts ...GenesisAccount) *GenesisDoc {
+func NewGenesis(
+	chainId string,
+	genesisAccounts []GenesisAccount,
+	genTxs []authtypes.StdTx,
+) *GenesisDoc {
 	codec := app.MakeCodec()
 	appStates := app.ModuleBasics.DefaultGenesis()
 
 	authDefaultState := authtypes.DefaultGenesisState()
 	authDefaultState.Accounts = genesisAccounts
-
+	
 	appStates["auth"] = codec.MustMarshalJSON(authDefaultState)
+
+	// gentxs
+	genutil := new(struct {
+		GenTxs []json.RawMessage `json:"gentxs"`
+	})
+	
+	for _, gentx := range genTxs {
+		genutil.GenTxs = append(genutil.GenTxs, codec.MustMarshalJSON(gentx))
+	}
+
+	fmt.Println("???", genTxs)
+	fmt.Println("!!!", genutil)
+	appStates["genutil"] = codec.MustMarshalJSON(*genutil)
+	
+	
+	fmt.Println("what the feck", appStates["genutil"])
+
 	appStatesJson, err := codec.MarshalJSON(appStates)
 
 	if err != nil {
 		panic(fmt.Errorf("could not initialize appstate, %v", err))
 	}
+
+	fmt.Println(">????", string(appStatesJson))
 
 	gendoc := &GenesisDoc{
 		ChainID:     chainId,
