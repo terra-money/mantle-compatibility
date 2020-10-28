@@ -27,18 +27,18 @@ var (
 
 // NewBadgerDB creates a Badger key-value store backed to the
 // directory dir supplied. If dir does not exist, it will be created.
-func NewBadgerCosmosAdapter(db *badger.DB) tmdb.DB {
+func NewBadgerCosmosAdapter(db *badger.DB) *BadgerCosmosAdapter {
 	return &BadgerCosmosAdapter{
 		db: db,
 	}
 }
 
-func (b *BadgerCosmosAdapter) Get(key []byte) []byte {
+func (b *BadgerCosmosAdapter) Get(key []byte) ([]byte, error) {
 	if len(key) == 0 {
-		return nil
+		return nil, errKeyEmpty
 	}
 	var val []byte
-	b.db.View(func(txn *badger.Txn) error {
+	err := b.db.View(func(txn *badger.Txn) error {
 		item, err := txn.Get(key)
 		if err == badger.ErrKeyNotFound {
 			return nil
@@ -51,15 +51,15 @@ func (b *BadgerCosmosAdapter) Get(key []byte) []byte {
 		}
 		return err
 	})
-	return val
+	return val, err
 }
 
-func (b *BadgerCosmosAdapter) Has(key []byte) bool {
+func (b *BadgerCosmosAdapter) Has(key []byte) (bool, error) {
 	if len(key) == 0 {
-		return false
+		return false, errKeyEmpty
 	}
 	var found bool
-	b.db.View(func(txn *badger.Txn) error {
+	err := b.db.View(func(txn *badger.Txn) error {
 		_, err := txn.Get(key)
 		if err != nil && err != badger.ErrKeyNotFound {
 			return err
@@ -67,17 +67,17 @@ func (b *BadgerCosmosAdapter) Has(key []byte) bool {
 		found = (err != badger.ErrKeyNotFound)
 		return nil
 	})
-	return found
+	return found, err
 }
 
-func (b *BadgerCosmosAdapter) Set(key, value []byte) {
+func (b *BadgerCosmosAdapter) Set(key, value []byte) error {
 	if len(key) == 0 {
-		// return errKeyEmpty
+		return errKeyEmpty
 	}
 	if value == nil {
-		// return errValueNil
+		return errValueNil
 	}
-	b.db.Update(func(txn *badger.Txn) error {
+	return b.db.Update(func(txn *badger.Txn) error {
 		return txn.Set(key, value)
 	})
 }
@@ -89,36 +89,34 @@ func withSync(db *badger.DB, err error) error {
 	return db.Sync()
 }
 
-func (b *BadgerCosmosAdapter) SetSync(key, value []byte) {
-	b.Set(key, value)
-	withSync(b.db, nil)
+func (b *BadgerCosmosAdapter) SetSync(key, value []byte) error {
+	return withSync(b.db, b.Set(key, value))
 }
 
-func (b *BadgerCosmosAdapter) Delete(key []byte) {
+func (b *BadgerCosmosAdapter) Delete(key []byte) error {
 	if len(key) == 0 {
-		// errKeyEmpty
+		return errKeyEmpty
 	}
-	b.db.Update(func(txn *badger.Txn) error {
+	return b.db.Update(func(txn *badger.Txn) error {
 		return txn.Delete(key)
 	})
 }
 
-func (b *BadgerCosmosAdapter) DeleteSync(key []byte) {
-	b.Delete(key)
-	withSync(b.db, nil)
+func (b *BadgerCosmosAdapter) DeleteSync(key []byte) error {
+	return withSync(b.db, b.Delete(key))
 }
 
-func (b *BadgerCosmosAdapter) Close() {
-	b.db.Close()
+func (b *BadgerCosmosAdapter) Close() error {
+	return b.db.Close()
 }
 
-func (b *BadgerCosmosAdapter) Print() {
-	// return nil
+func (b *BadgerCosmosAdapter) Print() error {
+	return nil
 }
 
-func (b *BadgerCosmosAdapter) iteratorOpts(start, end []byte, opts badger.IteratorOptions) *badgerDBIterator {
+func (b *BadgerCosmosAdapter) iteratorOpts(start, end []byte, opts badger.IteratorOptions) (*badgerDBIterator, error) {
 	if (start != nil && len(start) == 0) || (end != nil && len(end) == 0) {
-		return nil
+		return nil, errKeyEmpty
 	}
 	txn := b.db.NewTransaction(false)
 	iter := txn.NewIterator(opts)
@@ -136,17 +134,18 @@ func (b *BadgerCosmosAdapter) iteratorOpts(start, end []byte, opts badger.Iterat
 
 		txn:  txn,
 		iter: iter,
-	}
+	}, nil
 }
 
-func (b *BadgerCosmosAdapter) Iterator(start, end []byte) tmdb.Iterator {
+func (b *BadgerCosmosAdapter) Iterator(start, end []byte) (tmdb.Iterator, error) {
 	opts := badger.DefaultIteratorOptions
 	opts.PrefetchValues = false
 	return b.iteratorOpts(start, end, opts)
 }
 
-func (b *BadgerCosmosAdapter) ReverseIterator(start, end []byte) tmdb.Iterator {
+func (b *BadgerCosmosAdapter) ReverseIterator(start, end []byte) (tmdb.Iterator, error) {
 	opts := badger.DefaultIteratorOptions
+	opts.Reverse = true
 	opts.PrefetchValues = false
 	return b.iteratorOpts(end, start, opts)
 }
@@ -195,18 +194,17 @@ func (b *badgerDBBatch) Delete(key []byte) {
 	b.wb.Delete(key)
 }
 
-func (b *badgerDBBatch) Write() {
+func (b *badgerDBBatch) Write() error {
 	select {
 	case <-b.firstFlush:
-		b.wb.Flush()
+		return b.wb.Flush()
 	default:
-		fmt.Errorf("batch already flushed")
+		return fmt.Errorf("batch already flushed")
 	}
 }
 
-func (b *badgerDBBatch) WriteSync() {
-	b.Write()
-	withSync(b.db, nil)
+func (b *badgerDBBatch) WriteSync() error {
+	return withSync(b.db, b.Write())
 }
 
 func (b *badgerDBBatch) Close() {
