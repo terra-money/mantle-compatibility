@@ -33,6 +33,10 @@ func NewBadgerCosmosAdapter(db *badger.DB) *BadgerCosmosAdapter {
 	}
 }
 
+func (b *BadgerCosmosAdapter) SetDB(db *badger.DB) {
+	b.db = db
+}
+
 func (b *BadgerCosmosAdapter) Get(key []byte) ([]byte, error) {
 	if len(key) == 0 {
 		return nil, errKeyEmpty
