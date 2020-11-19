@@ -1,13 +1,14 @@
 package app
 
 import (
+	"io/ioutil"
+
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
 	terra "github.com/terra-project/core/app"
 	wasmconfig "github.com/terra-project/core/x/wasm/config"
-	"io/ioutil"
 )
 
 func NewTerraApp(db dbm.DB) *terra.TerraApp {
@@ -20,9 +21,9 @@ func NewTerraApp(db dbm.DB) *terra.TerraApp {
 		make(map[int64]bool),
 		&wasmconfig.Config{BaseConfig: wasmconfig.BaseConfig{
 			ContractQueryGasLimit: uint64(3000000),
-			CacheSize:             uint64(3000000),
+			// CacheSize:             uint64(3000000),
 		}},
-		fauxMerkleModeOpt, // error
+		// fauxMerkleModeOpt, // error
 		setPruningOptions(),
 	)
 }

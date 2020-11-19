@@ -1,11 +1,12 @@
 package app
 
 import (
+	"io/ioutil"
+
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
 	terra "github.com/terra-project/core/app"
-	"io/ioutil"
 )
 
 func NewTerraApp(db dbm.DB) *terra.TerraApp {
@@ -20,7 +21,7 @@ func NewTerraApp(db dbm.DB) *terra.TerraApp {
 		// 	ContractQueryGasLimit: viper.GetUint64(wasmconfig.FlagContractQueryGasLimit),
 		// 	CacheSize:             viper.GetUint64(wasmconfig.FlagCacheSize),
 		// }},
-		fauxMerkleModeOpt, // error
+		// fauxMerkleModeOpt, // error
 		// setPruningOptions(),
 	)
 }
