@@ -21,7 +21,7 @@ func NewTerraApp(db dbm.DB) *terra.TerraApp {
 		make(map[int64]bool),
 		&wasmconfig.Config{BaseConfig: wasmconfig.BaseConfig{
 			ContractQueryGasLimit: uint64(3000000),
-			// CacheSize:             uint64(3000000),
+			ContractLoggingWhitelist: "*",
 		}},
 		// fauxMerkleModeOpt, // error
 		setPruningOptions(),
