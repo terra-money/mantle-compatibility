@@ -459,6 +459,8 @@ github.com/terra-project/core v0.4.0 h1:oKz5cK4a93ZwsnphjnTttsghRGEISnaB6W2jgra7
 github.com/terra-project/core v0.4.0/go.mod h1:QoddSVukyuI5qM0rFp7xvKjTn/aoK3D177MUt1V7YXM=
 github.com/terra-project/core v0.4.1-rc.0 h1:2SwjBBUVAXafaB/9Sc72KPa7EiL/m9thNBDdeIrHgdI=
 github.com/terra-project/core v0.4.1-rc.0/go.mod h1:kPBkaYEsdH73eMITy+vWQRE7aqMi4BvjnqAcIpxYVh4=
+github.com/terra-project/core v0.4.1 h1:jbqgOdX2kkdT6/THiFhBBjFuWCD/4Gn73L5m+dodO9U=
+github.com/terra-project/core v0.4.1/go.mod h1:kPBkaYEsdH73eMITy+vWQRE7aqMi4BvjnqAcIpxYVh4=
 github.com/terra-project/go-cosmwasm v0.10.1-terra h1:3yvESyqndOoJKmmFyGKfQy7rLg2Gz4ULwwoCi4fDqAw=
 github.com/terra-project/go-cosmwasm v0.10.1-terra/go.mod h1:gAFCwllx97ejI+m9SqJQrmd2SBW7HA0fOjvWWJjM2uc=
 github.com/terra-project/go-cosmwasm v0.10.3 h1:fRLqM3R9iHKCsdGvWQALnRToDbb1jsPpix63/yD7BwE=

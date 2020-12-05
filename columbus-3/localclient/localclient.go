@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"runtime"
+	"sync"
 
 	abci "github.com/tendermint/tendermint/abci/types"
 	rpcclient "github.com/tendermint/tendermint/rpc/client"
@@ -16,10 +17,11 @@ import (
 // MUST implement rpcclient.Client
 type LocalClient struct {
 	App *terra.TerraApp
+	mtx *sync.Mutex
 	rpcclient.Client
 }
 
-func NewLocalClient(app *terra.TerraApp) LocalClient {
+func NewLocalClient(app *terra.TerraApp, m *sync.Mutex) LocalClient {
 	return LocalClient{
 		App: app,
 	}
@@ -31,6 +33,8 @@ func (c LocalClient) ABCIInfo() (*ctypes.ResultABCIInfo, error) {
 }
 
 func (c LocalClient) ABCIQuery(path string, data compattypes.HexBytes) (*ctypes.ResultABCIQuery, error) {
+	c.mtx.Lock()
+	defer c.mtx.Unlock()
 	return &ctypes.ResultABCIQuery{
 		Response: c.App.Query(abci.RequestQuery{
 			Data: data,
@@ -40,6 +44,8 @@ func (c LocalClient) ABCIQuery(path string, data compattypes.HexBytes) (*ctypes.
 }
 
 func (c LocalClient) ABCIQueryWithOptions(path string, data compattypes.HexBytes, opts rpcclient.ABCIQueryOptions) (*ctypes.ResultABCIQuery, error) {
+	c.mtx.Lock()
+	defer c.mtx.Unlock()
 	return &ctypes.ResultABCIQuery{
 		Response: c.App.Query(abci.RequestQuery{
 			Data:   data,
