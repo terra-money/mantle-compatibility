@@ -7,8 +7,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
-	terra "github.com/terra-project/core/app"
-	wasmconfig "github.com/terra-project/core/x/wasm/config"
+	terra "github.com/terra-money/core/app"
+	wasmconfig "github.com/terra-money/core/x/wasm/config"
 )
 
 func NewTerraApp(db dbm.DB) *terra.TerraApp {

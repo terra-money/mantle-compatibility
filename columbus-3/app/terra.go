@@ -6,7 +6,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
-	terra "github.com/terra-project/core/app"
+	terra "github.com/terra-money/core/app"
 )
 
 func NewTerraApp(db dbm.DB) *terra.TerraApp {

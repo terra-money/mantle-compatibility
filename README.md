@@ -1,6 +1,6 @@
 # mantle-compatibility
 
-Compatibility provider for [mantle-sdk](https://github.com/terra-project/mantle-sdk).
+Compatibility provider for [mantle-sdk](https://github.com/terra-money/mantle-sdk).
 
 # What & Why?
 

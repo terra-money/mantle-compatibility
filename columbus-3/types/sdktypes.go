@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	cmn "github.com/tendermint/tendermint/libs/common"
 	tmtypes "github.com/tendermint/tendermint/types"
-	"github.com/terra-project/core/x/genaccounts"
+	"github.com/terra-money/core/x/genaccounts"
 )
 
 type (

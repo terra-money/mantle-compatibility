@@ -5,9 +5,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authexported "github.com/cosmos/cosmos-sdk/x/auth/exported"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/terra-project/core/app"
-	core "github.com/terra-project/core/types"
-	. "github.com/terra-project/mantle-compatibility/types"
+	"github.com/terra-money/core/app"
+	core "github.com/terra-money/core/types"
+	. "github.com/terra-money/mantle-compatibility/types"
 	"time"
 )
 
