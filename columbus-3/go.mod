@@ -7,5 +7,5 @@ require (
 	github.com/dgraph-io/badger/v2 v2.0.3
 	github.com/tendermint/tendermint v0.32.13
 	github.com/tendermint/tm-db v0.2.0
-	github.com/terra-money/core v0.3.7
+	github.com/terra-project/core v0.3.7
 )
