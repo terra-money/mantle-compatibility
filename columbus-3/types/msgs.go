@@ -4,11 +4,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	distribution "github.com/cosmos/cosmos-sdk/x/distribution/types"
-	"github.com/terra-money/core/x/gov"
-	"github.com/terra-money/core/x/market"
-	"github.com/terra-money/core/x/oracle"
-	"github.com/terra-money/core/x/slashing"
-	"github.com/terra-money/core/x/staking"
+	"github.com/terra-project/core/x/gov"
+	"github.com/terra-project/core/x/market"
+	"github.com/terra-project/core/x/oracle"
+	"github.com/terra-project/core/x/slashing"
+	"github.com/terra-project/core/x/staking"
 )
 
 // bank modules are set as internal,
